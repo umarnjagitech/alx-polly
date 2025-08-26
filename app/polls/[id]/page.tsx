@@ -1,16 +1,11 @@
 import { notFound } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-
-const mockPolls = [
-  { id: "1", question: "What's your favorite programming language?", options: ["JavaScript", "Python", "Go", "Rust"], votes: [10, 20, 7, 5] },
-  { id: "2", question: "Tabs or spaces?", options: ["Tabs", "Spaces"], votes: [12, 15] },
-  { id: "3", question: "Best JS framework in 2025?", options: ["Next.js", "SvelteKit", "Nuxt", "Remix"], votes: [8, 3, 2, 2] },
-];
+import { getPollById } from "@/lib/polls";
 
 export default async function PollDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const poll = mockPolls.find((p) => p.id === id);
+  const poll = getPollById(id);
   if (!poll) return notFound();
 
   return (

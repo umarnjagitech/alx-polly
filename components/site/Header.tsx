@@ -1,7 +1,21 @@
+'use client'
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/app/auth/context";
+import { createSupabaseClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 
 export function Header() {
+  const session = useAuth();
+  const router = useRouter();
+  const supabase = createSupabaseClient();
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push("/");
+  };
+
   return (
     <header className="border-b border-gray-200 dark:border-gray-800">
       <div className="mx-auto max-w-5xl px-4 h-14 flex items-center justify-between">
@@ -17,12 +31,21 @@ export function Header() {
           </Link>
         </nav>
         <div className="flex items-center gap-2">
-          <Link href="/auth/login">
-            <Button variant="ghost">Login</Button>
-          </Link>
-          <Link href="/auth/register">
-            <Button>Sign up</Button>
-          </Link>
+          {session ? (
+            <>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{session.user.email}</p>
+              <Button variant="ghost" onClick={handleLogout}>Logout</Button>
+            </>
+          ) : (
+            <>
+              <Link href="/auth/login">
+                <Button variant="ghost">Login</Button>
+              </Link>
+              <Link href="/auth/register">
+                <Button>Sign up</Button>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>
