@@ -5,6 +5,12 @@ export type Poll = {
   votes: number[];
 };
 
+export type EditPollData = {
+  id: string;
+  question: string;
+  created_by: string;
+};
+
 let polls: Poll[] = [
   { id: "1", question: "What's your favorite programming language?", options: ["JavaScript", "Python", "Go", "Rust"], votes: [10, 20, 7, 5] },
   { id: "2", question: "Tabs or spaces?", options: ["Tabs", "Spaces"], votes: [12, 15] },

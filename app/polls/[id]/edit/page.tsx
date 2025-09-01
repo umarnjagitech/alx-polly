@@ -7,9 +7,13 @@ import { createSupabaseServer } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import { updatePollAction } from "@/app/polls/actions";
 
-export default async function EditPollPage({ params }: { params: { id: string } }) {
+export default async function EditPollPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const supabase = await createSupabaseServer();
-  const { id } = params;
+  const { id } = await params;
 
   const { data: poll, error: pollError } = await supabase
     .from("polls")
@@ -42,7 +46,11 @@ export default async function EditPollPage({ params }: { params: { id: string } 
             <input type="hidden" name="poll_id" value={poll.id} />
             <div className="space-y-2">
               <Label htmlFor="question">Question</Label>
-              <Input id="question" name="question" defaultValue={poll.question} />
+              <Input
+                id="question"
+                name="question"
+                defaultValue={poll.question}
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="options">Options (one per line)</Label>
