@@ -9,7 +9,7 @@ export default defineConfig({
     setupFiles: ['tests/setup.ts'],
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'html', 'json'],
+      reporter: ['text', 'html', 'json', 'lcov'],
       reportsDirectory: 'coverage',
       exclude: [
         'next.config.*',
