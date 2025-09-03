@@ -10,6 +10,7 @@ import { createSupabaseServer } from "@/lib/supabase/server";
 import { deletePollAction } from "@/app/polls/actions";
 
 export default async function PollsPage(props: {
+  //Testing optimization with this function
   searchParams?: Promise<{ [key: string]: string | undefined }>;
 }) {
   const supabase = await createSupabaseServer();
