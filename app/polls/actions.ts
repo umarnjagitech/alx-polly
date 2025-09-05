@@ -2,9 +2,19 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { parseCreatePoll, parseDeletePoll, parseUpdatePoll } from "@/lib/validation/polls";
+import {
+  parseCreatePoll,
+  parseDeletePoll,
+  parseUpdatePoll,
+} from "@/lib/validation/polls";
 import { requireUserId } from "@/lib/auth/server";
-import { createPollWithOptions, deletePoll, updatePoll } from "@/lib/pollService";
+import {
+  createPollWithOptions,
+  deletePoll,
+  updatePoll,
+} from "@/lib/pollService";
+import { toActionError } from "@/lib/errors";
+import { StandardActionResult } from "@/lib/types/polls";
 
 /**
  * Server Action: Create a poll.
@@ -13,13 +23,15 @@ import { createPollWithOptions, deletePoll, updatePoll } from "@/lib/pollService
  * - Calls `createPollWithOptions`
  * - Revalidates and redirects on success
  */
-export async function createPollAction(formData: FormData): Promise<void> {
+export async function createPollAction(
+  formData: FormData,
+): Promise<StandardActionResult<void> | void> {
   try {
     await requireUserId();
     const input = parseCreatePoll(formData);
     await createPollWithOptions(input);
   } catch (err) {
-    throw new Error(`Failed to create poll: ${err instanceof Error ? err.message : String(err)}`);
+    return toActionError(err, "Failed to create poll:");
   }
 
   revalidatePath("/polls");
@@ -32,13 +44,15 @@ export async function createPollAction(formData: FormData): Promise<void> {
  * - Validates input using `parseDeletePoll`
  * - Revalidates and redirects back to the listing
  */
-export async function deletePollAction(formData: FormData): Promise<void> {
+export async function deletePollAction(
+  formData: FormData,
+): Promise<StandardActionResult<void> | void> {
   try {
     await requireUserId();
     const { pollId } = parseDeletePoll(formData);
     await deletePoll(pollId);
   } catch (err) {
-    throw new Error(`Failed to delete poll: ${err instanceof Error ? err.message : String(err)}`);
+    return toActionError(err, "Failed to delete poll:");
   }
 
   revalidatePath("/polls");
@@ -51,7 +65,9 @@ export async function deletePollAction(formData: FormData): Promise<void> {
  * - Validates input using `parseUpdatePoll`
  * - Revalidates poll detail and listing pages and redirects back
  */
-export async function updatePollAction(formData: FormData): Promise<void> {
+export async function updatePollAction(
+  formData: FormData,
+): Promise<StandardActionResult<void> | void> {
   let pollId: string | null = null;
   try {
     await requireUserId();
@@ -59,7 +75,7 @@ export async function updatePollAction(formData: FormData): Promise<void> {
     pollId = input.pollId;
     await updatePoll(input);
   } catch (err) {
-    throw new Error(`Failed to update poll: ${err instanceof Error ? err.message : String(err)}`);
+    return toActionError(err, "Failed to update poll:");
   }
 
   if (pollId) {
@@ -68,5 +84,3 @@ export async function updatePollAction(formData: FormData): Promise<void> {
   revalidatePath(`/polls`);
   redirect(`/polls/${pollId}?updated=1`);
 }
-
-
