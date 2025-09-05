@@ -28,4 +28,9 @@ export type DeletePollInput = {
   pollId: UUID;
 };
 
-
+/**
+ * Standard result type for server actions.
+ */
+export type StandardActionResult<T> =
+  | { ok: true; data: T }
+  | { ok: false; error: { code: string; message: string; cause?: unknown } };
