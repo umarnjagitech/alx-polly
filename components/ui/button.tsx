@@ -1,3 +1,9 @@
+/**
+ * Button component with multiple variants and sizes.
+ * 
+ * Provides consistent styling and behavior for interactive elements.
+ * Supports different visual styles and sizes for various use cases.
+ */
 import * as React from "react";
 import { cn } from "@/lib/utils";
 

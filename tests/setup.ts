@@ -1,3 +1,9 @@
+/**
+ * Test setup configuration.
+ * 
+ * Configures testing environment with jest-dom matchers.
+ * Disables Next.js warnings during component tests.
+ */
 import '@testing-library/jest-dom';
 
 // Silence Next.js server-only/client-only warnings during component tests

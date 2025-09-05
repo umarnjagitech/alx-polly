@@ -1,3 +1,9 @@
+/**
+ * Textarea component for multi-line text input.
+ * 
+ * Provides consistent styling for textarea elements.
+ * Supports dark mode and focus states.
+ */
 import * as React from "react";
 import { cn } from "@/lib/utils";
 

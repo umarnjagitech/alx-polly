@@ -1,3 +1,9 @@
+/**
+ * Unit tests for PollResultChart component.
+ * 
+ * Tests rendering, chart type switching, and empty state handling.
+ * Verifies proper display of vote counts and percentages.
+ */
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import PollResultChart from '@/components/PollResultChart';

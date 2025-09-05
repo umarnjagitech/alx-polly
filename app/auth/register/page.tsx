@@ -1,3 +1,9 @@
+/**
+ * Registration page component.
+ * 
+ * Provides a form for new users to create an account.
+ * Handles form submission and shows success message before redirecting to login.
+ */
 'use client'
 
 import Link from "next/link";

@@ -1,3 +1,10 @@
+/**
+ * Polls listing page component.
+ * 
+ * Displays all polls with vote counts and provides navigation to create new polls.
+ * Shows success message when a poll is created.
+ * Allows poll creators to delete their own polls.
+ */
 import Link from "next/link";
 import {
   Card,

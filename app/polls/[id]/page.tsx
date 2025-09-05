@@ -1,3 +1,11 @@
+/**
+ * Poll details page component.
+ * 
+ * Displays a poll with voting form and results chart.
+ * Handles voting with upsert to allow vote changes.
+ * Shows edit link for poll creators.
+ * Includes server action for vote submission.
+ */
 import { notFound } from "next/navigation";
 import {
   Card,

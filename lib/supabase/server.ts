@@ -1,6 +1,12 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
+/**
+ * Create a Supabase client configured for server-side operations.
+ * 
+ * Uses Next.js cookies() API to handle authentication state.
+ * Requires NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY environment variables.
+ */
 export const createSupabaseServer = async () => {
   const cookieStore = await cookies()
 

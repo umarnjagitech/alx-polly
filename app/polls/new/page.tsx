@@ -1,3 +1,9 @@
+/**
+ * New poll creation page component.
+ * 
+ * Provides a form for authenticated users to create new polls.
+ * Uses server action for form submission and validation.
+ */
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

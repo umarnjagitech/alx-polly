@@ -1,3 +1,9 @@
+/**
+ * Card components for content organization.
+ * 
+ * Provides consistent container styling with header, content, and footer sections.
+ * Supports dark mode and responsive design.
+ */
 import * as React from "react";
 import { cn } from "@/lib/utils";
 

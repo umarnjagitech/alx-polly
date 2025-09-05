@@ -1,3 +1,10 @@
+/**
+ * Next.js middleware for handling Supabase authentication.
+ * 
+ * Sets up Supabase client with cookie-based session management.
+ * Handles auth state synchronization between server and client.
+ * Skips auth processing if environment variables are missing.
+ */
 
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
@@ -72,6 +79,11 @@ export async function middleware(request: NextRequest) {
   return response
 }
 
+/**
+ * Middleware configuration.
+ * 
+ * Matches all routes except static assets and favicon.
+ */
 export const config = {
   matcher: [
     /*

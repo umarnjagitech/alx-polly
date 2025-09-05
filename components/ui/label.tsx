@@ -1,3 +1,9 @@
+/**
+ * Label component for form fields.
+ * 
+ * Provides consistent styling for form labels.
+ * Includes accessibility features for screen readers.
+ */
 import * as React from "react";
 import { cn } from "@/lib/utils";
 

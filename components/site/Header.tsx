@@ -1,3 +1,10 @@
+/**
+ * Site header component.
+ * 
+ * Provides navigation links and authentication controls.
+ * Shows user email and logout button when authenticated.
+ * Shows login/register buttons when not authenticated.
+ */
 'use client'
 
 import Link from "next/link";

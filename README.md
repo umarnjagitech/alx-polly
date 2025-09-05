@@ -1,50 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## ALX Polly
 
-## Getting Started
+ALX Polly is a polling application built with Next.js App Router and Supabase. Users can register/login, create polls with multiple options, vote, and view results via an accessible chart component.
 
-First, run the development server:
+### Tech Stack
+- Next.js (App Router, Server Components, Server Actions)
+- Supabase (Postgres, Auth, RPC)
+- shadcn/ui + Tailwind CSS
+- Vitest + React Testing Library
 
+### Quick Start
+1) Install dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-## Environment variables
-
-Create a `.env.local` in the project root with your Supabase credentials:
-
+2) Configure environment variables in `.env.local`:
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=your-project-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-
-# Optional server-only key if you plan to use server actions
+# Optional server-only key if using server-side Supabase operations
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 ```
+3) Run migrations (if using local Supabase):
+```bash
+# Ensure your Supabase project has the schema from supabase/migrations
+# Apply 0001_create_polls.sql to create tables and RPCs
+```
+4) Start the dev server:
+```bash
+npm run dev
+```
+Open `http://localhost:3000`.
 
-Restart the dev server after adding env vars.
+### NPM Scripts
+- `dev`: Run Next.js in development mode
+- `build`: Build the app
+- `start`: Start the production server
+- `test`: Run unit tests with Vitest
+- `test:watch`: Watch tests
+
+### Environment and Secrets
+Environment variables are read from `.env.local`. Never commit secrets. Restart the dev server after changes.
+
+### Project Structure
+- `app/` — Route handlers and pages using App Router
+  - `app/polls/` — Poll listing, creation, view, and edit pages
+  - `app/auth/` — Login and registration pages and client context
+- `components/` — Reusable UI and `PollResultChart`
+- `lib/` — Domain logic, Supabase clients, validation, and types
+- `tests/` — Unit and component tests
+- `supabase/` — SQL migrations
+
+### Key Modules
+- `lib/pollService.ts` — Supabase operations for create/update/delete polls (via SQL tables and RPC)
+- `app/polls/actions.ts` — Server Actions wrapping validation, auth, mutations, and cache revalidation
+- `components/PollResultChart.tsx` — Client component to display results as bar/pie
+
+### Database
+Tables: `polls`, `poll_options`, and views such as `poll_vote_counts`.
+RPC: `create_poll_with_options(question text, options text[])` used by `lib/pollService.ts`.
+
+### Testing
+```bash
+npm run test
+```
+Vitest configuration lives in `vitest.config.ts`. Tests are in `tests/`.
+
+### Deployment
+You can deploy to any Next.js-compatible platform. Ensure env vars are configured. For Vercel, set project environment variables to match `.env.local` (without committing secrets).
+
+### Accessibility & UX
+- Keyboard navigable components
+- Color-contrast friendly chart palette
+- Server-rendered pages for fast initial loads
+
+### Contributing
+1. Create a feature branch
+2. Add tests for changes
+3. Run `npm run lint` and `npm test`
+4. Open a PR
+
+### Maintenance Notes
+- Avoid committing the `coverage/` directory from local test runs
+- Example/demo files should live under clearly named paths or be removed if unused

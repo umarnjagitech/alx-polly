@@ -5,12 +5,21 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
+/**
+ * A single poll option with display order.
+ */
 interface PollOption {
   id: string;
   option_text: string;
   position: number;
 }
 
+/**
+ * Props for the PollResultChart component.
+ *
+ * Provide a `votesByOptionId` map where keys are option ids and values
+ * are the total votes for that option.
+ */
 interface PollResultChartProps {
   question: string;
   options: PollOption[];
@@ -22,6 +31,11 @@ interface PollResultChartProps {
   showToggle?: boolean;
 }
 
+/**
+ * Render poll results as either a bar chart or a pie chart.
+ *
+ * Defaults to a bar chart, with a toggle to switch to pie when `showToggle` is true.
+ */
 export default function PollResultChart({
   question,
   options,

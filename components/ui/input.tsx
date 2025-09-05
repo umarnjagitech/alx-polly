@@ -1,3 +1,9 @@
+/**
+ * Input component for form fields.
+ * 
+ * Provides consistent styling for text input elements.
+ * Supports dark mode and focus states.
+ */
 import * as React from "react";
 import { cn } from "@/lib/utils";
 

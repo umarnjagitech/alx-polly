@@ -1,3 +1,9 @@
+/**
+ * Unit tests for poll server actions.
+ * 
+ * Tests createPollAction, deletePollAction, and updatePollAction.
+ * Mocks dependencies and verifies proper validation and error handling.
+ */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 vi.mock('@/lib/auth/server', () => ({

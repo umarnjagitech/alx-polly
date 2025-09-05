@@ -1,3 +1,9 @@
+/**
+ * Login page component.
+ * 
+ * Provides a form for users to authenticate with email and password.
+ * Handles form submission and redirects to polls page on success.
+ */
 'use client'
 
 import Link from "next/link";

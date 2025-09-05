@@ -1,3 +1,9 @@
+/**
+ * User profile page component.
+ * 
+ * Displays basic user information for authenticated users.
+ * Redirects to login page if user is not authenticated.
+ */
 'use client'
 
 import { useAuth } from "@/app/auth/context";

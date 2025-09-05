@@ -1,3 +1,9 @@
+/**
+ * Vitest configuration for testing.
+ * 
+ * Configures test environment, coverage settings, and path aliases.
+ * Excludes certain files from coverage reporting.
+ */
 import { defineConfig } from 'vitest/config';
 import path from 'path';
 

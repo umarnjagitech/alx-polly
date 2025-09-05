@@ -1,3 +1,11 @@
+/**
+ * Poll edit page component.
+ * 
+ * Allows poll creators to edit their poll's question and options.
+ * Pre-fills form with current poll data.
+ * Uses server action for form submission.
+ * Returns 404 if user is not the poll creator.
+ */
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
