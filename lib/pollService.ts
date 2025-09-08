@@ -27,8 +27,19 @@ export async function createPollWithOptions(input: CreatePollInput): Promise<voi
  * 2) Delete all existing `poll_options` for the poll
  * 3) Insert the provided options in order
  */
-export async function updatePoll(input: UpdatePollInput): Promise<void> {
+export async function updatePoll(input: UpdatePollInput, userId: string): Promise<void> {
   const supabase = await createSupabaseServer();
+
+  const { data: poll, error: selectErr } = await supabase
+    .from('polls')
+    .select('id')
+    .eq('id', input.pollId)
+    .eq('created_by', userId)
+    .single();
+
+  if (selectErr || !poll) {
+    throw new Error('Poll not found or you do not have permission to update it.');
+  }
 
   const { error: upErr } = await supabase
     .from("polls")
@@ -56,12 +67,22 @@ export async function updatePoll(input: UpdatePollInput): Promise<void> {
 /**
  * Delete a poll by id. Cascades are expected to be handled by DB constraints.
  */
-export async function deletePoll(pollId: string): Promise<void> {
+export async function deletePoll(pollId: string, userId: string): Promise<void> {
   const supabase = await createSupabaseServer();
+
+  const { data: poll, error: selectErr } = await supabase
+    .from('polls')
+    .select('id')
+    .eq('id', pollId)
+    .eq('created_by', userId)
+    .single();
+
+  if (selectErr || !poll) {
+    throw new Error('Poll not found or you do not have permission to delete it.');
+  }
+
   const { error } = await supabase.from("polls").delete().eq("id", pollId);
   if (error) {
     throw new Error(error.message);
   }
 }
-
-

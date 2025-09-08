@@ -60,4 +60,36 @@ export function parseDeletePoll(formData: FormData): { pollId: string } {
   return { pollId };
 }
 
+/**
+ * Validate API input for creating a new poll.
+ *
+ * Validates that a question is provided and at least 2 options are given.
+ */
+export function validateCreatePollApi(data: any): CreatePollInput {
+  const { question, options } = data;
+  if (!question || !Array.isArray(options) || options.length < 2) {
+    throw new Error("Please provide a question and at least two options.");
+  }
+  return {
+    question: String(question).trim(),
+    options: options.map((o) => String(o).trim()).filter(Boolean),
+  };
+}
 
+/**
+ * Validate API input for updating an existing poll.
+ *
+ * Validates that a question is provided and at least 2 options are given.
+ */
+export function validateUpdatePollApi(
+  data: any,
+): Omit<UpdatePollInput, "pollId"> {
+  const { question, options } = data;
+  if (!question || !Array.isArray(options) || options.length < 2) {
+    throw new Error("Please provide a question and at least two options.");
+  }
+  return {
+    question: String(question).trim(),
+    options: options.map((o) => String(o).trim()).filter(Boolean),
+  };
+}

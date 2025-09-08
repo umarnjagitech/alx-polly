@@ -6,7 +6,7 @@
  * Shows edit link for poll creators.
  * Includes server action for vote submission.
  */
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -19,43 +19,16 @@ import { createSupabaseServer } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import PollResultChart from "@/components/PollResultChart";
-
-async function voteAction(formData: FormData) {
-  "use server";
-  const optionId = String(formData.get("option") || "");
-  const pollId = String(formData.get("poll_id") || "");
-  if (!optionId || !pollId) {
-    throw new Error("Please select an option.");
-  }
-  const supabase = await createSupabaseServer();
-  const { data: userRes } = await supabase.auth.getUser();
-  const voterId = userRes?.user?.id;
-
-  if (!voterId) {
-    throw new Error("You must be logged in to vote.");
-  }
-
-  // Use upsert to handle duplicate votes gracefully
-  const { error } = await supabase
-    .from("poll_votes")
-    .upsert(
-      { poll_id: pollId, option_id: optionId, voter_id: voterId },
-      { onConflict: "poll_id,voter_id" },
-    );
-
-  if (error) {
-    throw new Error("Failed to submit vote. Please try again.");
-  }
-
-  revalidatePath(`/polls/${pollId}`);
-}
+import { voteAction } from "@/app/polls/actions";
 
 export default async function PollDetailsPage({
   params,
+  searchParams,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const { id } = await params;
+  const { id } = params;
   const supabase = await createSupabaseServer();
 
   const { data: poll, error: pollError } = await supabase
@@ -131,6 +104,20 @@ export default async function PollDetailsPage({
             </div>
           </CardHeader>
           <CardContent>
+            {searchParams.error === 'unauthenticated' && (
+              <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+                <p className="text-sm text-red-800 dark:text-red-200">
+                  You must be logged in to vote.
+                </p>
+              </div>
+            )}
+            {searchParams.error === 'no_option' && (
+              <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+                <p className="text-sm text-red-800 dark:text-red-200">
+                  Please select an option to vote.
+                </p>
+              </div>
+            )}
             {existingVote && (
               <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
                 <p className="text-sm text-blue-800 dark:text-blue-200">

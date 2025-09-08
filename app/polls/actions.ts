@@ -15,6 +15,7 @@ import {
 } from "@/lib/pollService";
 import { toActionError } from "@/lib/errors";
 import { StandardActionResult } from "@/lib/types/polls";
+import { createSupabaseServer } from "@/lib/supabase/server";
 
 /**
  * Server Action: Create a poll.
@@ -48,9 +49,9 @@ export async function deletePollAction(
   formData: FormData,
 ): Promise<StandardActionResult<void> | void> {
   try {
-    await requireUserId();
+    const userId = await requireUserId();
     const { pollId } = parseDeletePoll(formData);
-    await deletePoll(pollId);
+    await deletePoll(pollId, userId);
   } catch (err) {
     return toActionError(err, "Failed to delete poll:");
   }
@@ -70,10 +71,10 @@ export async function updatePollAction(
 ): Promise<StandardActionResult<void> | void> {
   let pollId: string | null = null;
   try {
-    await requireUserId();
+    const userId = await requireUserId();
     const input = parseUpdatePoll(formData);
     pollId = input.pollId;
-    await updatePoll(input);
+    await updatePoll(input, userId);
   } catch (err) {
     return toActionError(err, "Failed to update poll:");
   }
@@ -83,4 +84,33 @@ export async function updatePollAction(
   }
   revalidatePath(`/polls`);
   redirect(`/polls/${pollId}?updated=1`);
+}
+
+export async function voteAction(formData: FormData) {
+  const optionId = String(formData.get("option") || "");
+  const pollId = String(formData.get("poll_id") || "");
+  if (!optionId) {
+    return redirect(`/polls/${pollId}?error=no_option`);
+  }
+  const supabase = await createSupabaseServer();
+  const { data: userRes } = await supabase.auth.getUser();
+  const voterId = userRes?.user?.id;
+
+  if (!voterId) {
+    return redirect(`/polls/${pollId}?error=unauthenticated`);
+  }
+
+  // Use upsert to handle duplicate votes gracefully
+  const { error } = await supabase
+    .from("poll_votes")
+    .upsert(
+      { poll_id: pollId, option_id: optionId, voter_id: voterId },
+      { onConflict: "poll_id,voter_id" },
+    );
+
+  if (error) {
+    throw new Error("Failed to submit vote. Please try again.");
+  }
+
+  revalidatePath(`/polls/${pollId}`);
 }
