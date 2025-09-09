@@ -61,10 +61,11 @@ export async function deletePollAction(
 }
 
 /**
- * Server Action: Update a poll and its options.
- * - Requires an authenticated user
- * - Validates input using `parseUpdatePoll`
- * - Revalidates poll detail and listing pages and redirects back
+ * Update a poll and its options; requires an authenticated user and validated form input.
+ *
+ * Validates the submitted data via `parseUpdatePoll`, performs the update for the authenticated
+ * user, revalidates the poll listing and (if present) the updated poll detail, and redirects
+ * to the poll page with `?updated=1`. On failure the function returns a standard action error.
  */
 export async function updatePollAction(
   formData: FormData,

@@ -15,6 +15,15 @@ import { useState } from "react";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
+/**
+ * Registration page component that renders a sign-up form and handles user creation.
+ *
+ * Renders a card-based form collecting email and password, performs account creation via Supabase auth,
+ * displays error or success feedback, and on successful registration redirects the user to `/auth/login`
+ * after a short delay to allow the success message to be read.
+ *
+ * @returns The React element for the registration page.
+ */
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
