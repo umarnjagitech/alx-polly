@@ -23,24 +23,35 @@ export default function RegisterPage() {
   const router = useRouter();
   const supabase = createSupabaseClient();
 
+  /**
+   * Handle registration form submission.
+   * 
+   * Creates new user account with Supabase and shows success message.
+   * Redirects to login page after 3 seconds on successful registration.
+   */
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
+    
     try {
+      // Attempt to create new user account
       const { error } = await supabase.auth.signUp({
         email,
         password,
       });
+      
       if (error) {
         setError(error.message);
       } else {
+        // Show success message and redirect after delay
         setSuccess("Registration successful! Please check your email to confirm your account.");
         setTimeout(() => {
           router.push("/auth/login");
-        }, 3000);
+        }, 3000); // 3 second delay to show success message
       }
     } catch (error: any) {
+      // Handle any unexpected errors
       setError(error.message);
     }
   };

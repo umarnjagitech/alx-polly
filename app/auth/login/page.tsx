@@ -22,20 +22,31 @@ export default function LoginPage() {
   const router = useRouter();
   const supabase = createSupabaseClient();
 
+  /**
+   * Handle login form submission.
+   * 
+   * Authenticates user with Supabase and redirects to polls page on success.
+   * Shows error message if authentication fails.
+   */
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
+    
     try {
+      // Attempt to sign in with email and password
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
+      
       if (error) {
         setError(error.message);
       } else {
+        // Redirect to polls page on successful login
         router.push("/polls");
       }
     } catch (error: any) {
+      // Handle any unexpected errors
       setError(error.message);
     }
   };
