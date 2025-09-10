@@ -86,12 +86,26 @@ export async function updatePollAction(
   redirect(`/polls/${pollId}?updated=1`);
 }
 
+/**
+ * Server Action: Submit a vote for a poll option.
+ * 
+ * - Requires an authenticated user
+ * - Uses upsert to handle duplicate votes gracefully (one vote per user per poll)
+ * - Redirects with error parameters if validation fails
+ * - Revalidates the poll page to show updated results
+ * 
+ * @param formData - Form data containing option_id and poll_id
+ */
 export async function voteAction(formData: FormData) {
   const optionId = String(formData.get("option") || "");
   const pollId = String(formData.get("poll_id") || "");
+  
+  // Validate required fields
   if (!optionId) {
     return redirect(`/polls/${pollId}?error=no_option`);
   }
+  
+  // Get authenticated user
   const supabase = await createSupabaseServer();
   const { data: userRes } = await supabase.auth.getUser();
   const voterId = userRes?.user?.id;
