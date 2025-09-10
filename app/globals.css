@@ -20,7 +20,26 @@
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: linear-gradient(to right, #000000, #430000, #000000);
+  color: #ededed;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.dark-theme body {
+  background: linear-gradient(to right, #000000, #430000, #000000);
+  color: #ededed;
+}
+
+.dark-theme .card {
+  background-color: rgba(10, 10, 10, 0.5);
+  border: 1px solid #430000;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.1);
+}
+
+.dark-theme a {
+    color: #ff4d4d;
+}
+
+.dark-theme a:hover {
+    color: #ff8080;
 }
